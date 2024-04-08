@@ -1,0 +1,58 @@
+#namespace
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dev
+  labels:
+    name: dev
+...    
+#pods
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name:  myapp
+  namespace: dev
+spec:
+  containers:
+  - name: myapp
+    image: nginx
+
+    ports:
+      - containerPort: 80
+
+...
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: myapp1
+  namespace: dev
+spec:
+  selector:
+    app: myapp
+  ports:
+  - port: 80
+    targetPort: 80
+  type: NodePort
+...
+---
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: my-app
+  spec:
+  replicas: 10
+  selector:
+    app: my-app
+  template:
+    metadata: my-app
+      labels:
+        app: myapp
+        name: myapp
+          image: nginx
+          ports: 
+              - containerPort: 80
+...
